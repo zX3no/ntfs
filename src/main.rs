@@ -108,11 +108,30 @@ fn main() {
     let n_per_index_buffer = buf[68];
     assert_eq!(n_per_index_buffer, 0x01);
 
-    let bootstrap_code = &buf[510 - 426..510];
-    assert_eq!(426, bootstrap_code.len());
-    assert_ne!(buf[510], bootstrap_code[bootstrap_code.len() - 1]);
+    //Unused
+    assert_eq!(buf[69], 0);
+    assert_eq!(buf[70], 0);
+    assert_eq!(buf[71], 0);
+
+    //Unused
+    assert_eq!(72, 0x48);
+    let volume_serial_number = u64::from_le_bytes(buf[72..72 + 8].try_into().unwrap());
+    println!("volume serial number: {}", volume_serial_number);
+
+    //Unused
+    assert_eq!(0x50, 80);
+    assert_eq!(buf[80], 0);
+    assert_eq!(buf[81], 0);
+    assert_eq!(buf[82], 0);
+    assert_eq!(buf[83], 0);
+
+    //The code that loads the rest of the operating system.
+    //This is pointed to by the first 3 bytes of this sector.
+    assert_eq!(84, 0x54);
+    let _bootstrap_code = &buf[84..84 + 426];
 
     //This flag indicates that this is a valid boot sector.
+    assert_eq!(510, 0x01FE);
     let end_of_sector = u16::from_le_bytes([buf[510], buf[511]]);
     assert_eq!(end_of_sector, 0xAA55);
 
