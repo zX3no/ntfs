@@ -33,8 +33,7 @@ use std::{
 };
 
 #[rustfmt::skip]
-///512 bytes
-pub const PARTITION_BOOT_SECTOR: usize = 3 + 8 + 2 + 1 + 2 + 3 + 2 + 1 + 2 + 2 + 2 + 4 +4 + 4 + 8 + 8 + 8 + 1 + 3 + 1 + 3 + 8 + 4 + 426 + 2;
+pub const PARTITION_BOOT_SECTOR_SIZE: usize = 512;
 
 #[derive(Debug, PartialEq)]
 pub enum Size {
@@ -61,7 +60,7 @@ pub struct PartitionBootSector {
 }
 
 pub fn pbs(reader: &mut BufReader<File>) -> PartitionBootSector {
-    let mut buf = [0u8; PARTITION_BOOT_SECTOR];
+    let mut buf = [0u8; PARTITION_BOOT_SECTOR_SIZE];
     reader.read_exact(&mut buf).unwrap();
 
     //Causes execution to continue after the data structures in this boot sector.
