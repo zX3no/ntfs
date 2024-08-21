@@ -1,10 +1,13 @@
 pub use file_record::*;
+#[allow(unused_imports)]
 pub use master_file_table::*;
 pub use partition_boot_sector::*;
+pub use attribute::*;
 
 pub mod file_record;
 pub mod master_file_table;
 pub mod partition_boot_sector;
+pub mod attribute;
 
 #[inline]
 pub fn u64_from_slice(buf: &[u8]) -> u64 {

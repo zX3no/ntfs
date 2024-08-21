@@ -33,14 +33,3 @@
 //!| > 24   | A_File    |     | An ordinary file                                       |
 //!| > 24   | A_Dir     |     | An ordinary directory                                  |
 //!| ...    | ...       |     | ...                                                    |
-
-
-/// Every attribute in every MFT record has a standard header.
-/// The header stores information about the attribute's type, size, name (optional) and whether it is resident, or not.
-/// <https://flatcap.github.io/linux-ntfs/ntfs/concepts/attribute_header.html>
-//TODO: Attribute Headers
-pub enum Flag {
-    Compressed = 0x0001,
-    Encrypted = 0x4000,
-    Sparse = 0x8000,
-}
