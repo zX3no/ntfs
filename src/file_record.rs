@@ -2,7 +2,8 @@
 //! The first FILE Record that describes a given file is called the Base FILE record and others are called Extension FILE Records.
 //! A FILE Record is built up from a header, several variable length attributes and an end marker (0xFFFFFFFF).
 //!
-//! Header
+//! # Header
+//!
 //!| Offset | Size | OS | Description                                      |
 //!|--------|------|----|--------------------------------------------------|
 //!| 0x00   | 4    |    | Magic number 'FILE'                              |
@@ -21,6 +22,5 @@
 //!| 0x2C   | 4    | XP | Number of this MFT Record                        |
 //!|        | 2    |    | Update Sequence Number (a)                       |
 //!|        | 2S-2 |    | Update Sequence Array (a)                        |
-
 
 pub struct FileRecord {}

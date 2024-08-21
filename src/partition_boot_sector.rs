@@ -32,7 +32,6 @@ use std::{
     str::from_utf8,
 };
 
-#[rustfmt::skip]
 pub const PARTITION_BOOT_SECTOR_SIZE: usize = 512;
 
 #[derive(Debug, PartialEq)]

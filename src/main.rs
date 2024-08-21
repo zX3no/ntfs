@@ -1,3 +1,4 @@
+#![feature(read_buf, core_io_borrowed_buf)]
 //! <https://flatcap.github.io/linux-ntfs/ntfs/index.html>
 //!
 //! <https://en.wikipedia.org/wiki/NTFS>
@@ -17,7 +18,6 @@ pub mod partition_boot_sector;
 fn main() {
     let file = File::open("\\\\.\\C:").expect("Run as Admin");
     let mut reader = BufReader::new(file);
-
     let pbs = pbs(&mut reader);
     dbg!(&pbs);
 }
