@@ -2,22 +2,19 @@
 //! <https://flatcap.github.io/linux-ntfs/ntfs/index.html>
 //!
 //! <https://en.wikipedia.org/wiki/NTFS>
-pub use std::{
+use ntfs::*;
+use std::{
     fs::File,
-    io::{BufReader, Read, Seek, SeekFrom},
+    io::{BufReader, Seek, SeekFrom},
 };
-
-pub use file_record::*;
-pub use master_file_table::*;
-pub use partition_boot_sector::*;
-
-pub mod file_record;
-pub mod master_file_table;
-pub mod partition_boot_sector;
 
 fn main() {
     let file = File::open("\\\\.\\C:").expect("Run as Admin");
     let mut reader = BufReader::new(file);
     let pbs = pbs(&mut reader);
-    dbg!(&pbs);
+
+    let mft_start_sector = pbs.mft_cluster_number * 8 * pbs.bytes_per_sector as u64;
+    reader.seek(SeekFrom::Start(mft_start_sector)).unwrap();
+
+    file_record(&mut reader);
 }

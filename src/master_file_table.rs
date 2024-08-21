@@ -34,31 +34,6 @@
 //!| > 24   | A_Dir     |     | An ordinary directory                                  |
 //!| ...    | ...       |     | ...                                                    |
 
-///In NTFS, everything on disk is a file. Even the metadata is stored as a set of files.
-///The Master File Table (MFT) is an index of every file on the volume.
-///For each file, the MFT keeps a set of records called attributes and each attribute stores a different type of information.
-///
-///<https://flatcap.github.io/linux-ntfs/ntfs/attributes/index.html>
-pub mod attribute {
-    pub const STANDARD_INFORMATION_OFFSET: u64 = 0x10;
-    pub const ATTRIBUTE_LIST_OFFSET: u64 = 0x20;
-    pub const FILE_NAME_OFFSET: u64 = 0x30;
-    pub const VOLUME_VERSION_OFFSET: u64 = 0x40; //Windows NT
-    pub const OBJECT_ID_OFFSET: u64 = 0x40; //Windows 2000
-    pub const SECURITY_DESCRIPTOR_OFFSET: u64 = 0x50;
-    pub const VOLUME_NAME_OFFSET: u64 = 0x60;
-    pub const VOLUME_INFORMATION_OFFSET: u64 = 0x70;
-    pub const DATA_OFFSET: u64 = 0x80;
-    pub const INDEX_ROOT_OFFSET: u64 = 0x90;
-    pub const INDEX_ALLOCATION_OFFSET: u64 = 0xA0;
-    pub const BITMAP_OFFSET: u64 = 0xB0;
-    pub const SYMBOLIC_LINK_OFFSET: u64 = 0xC0; //Windows NT
-    pub const REPARSE_POINT_OFFSET: u64 = 0xC0; //Windows 2000
-    pub const EA_INFORMATION_OFFSET: u64 = 0xD0;
-    pub const EA_OFFSET: u64 = 0xE0;
-    pub const PROPERTY_SET_OFFSET: u64 = 0xF0; //Windows NT
-    pub const LOGGED_UTILITY_STREAM_OFFSET: u64 = 0x100; //Windows 2000
-}
 
 /// Every attribute in every MFT record has a standard header.
 /// The header stores information about the attribute's type, size, name (optional) and whether it is resident, or not.
