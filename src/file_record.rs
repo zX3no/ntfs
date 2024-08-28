@@ -24,12 +24,9 @@
 //!|        | 2S-2 |    | Update Sequence Array (a)                        |
 
 use crate::*;
-use std::{
-    fs::File,
-    io::{BufReader, Read},
-    str::from_utf8_unchecked,
-};
+use std::str::from_utf8_unchecked;
 
+#[derive(Debug)]
 pub struct FileRecord {
     pub update_sequence_offset: u16,
     pub update_sequence_size: u16,
@@ -75,12 +72,34 @@ pub enum Permissions {
     Encrypted = 0x4000,
 }
 
-pub fn file_record(reader: &mut BufReader<File>) -> FileRecord {
-    let mut buf = [0u8; 1024];
-    reader.read_exact(&mut buf).unwrap();
+// Each MFT FILE Record is built up from Attributes.
+// The list of possible Attributes is defined in $AttrDef.
+// Type	OS	Name
+// 0x10	 	$STANDARD_INFORMATION
+// 0x20	 	$ATTRIBUTE_LIST
+// 0x30	 	$FILE_NAME
+// 0x40	NT	$VOLUME_VERSION
+// 0x40	2K	$OBJECT_ID
+// 0x50	 	$SECURITY_DESCRIPTOR
+// 0x60	 	$VOLUME_NAME
+// 0x70	 	$VOLUME_INFORMATION
+// 0x80	 	$DATA
+// 0x90	 	$INDEX_ROOT
+// 0xA0	 	$INDEX_ALLOCATION
+// 0xB0	 	$BITMAP
+// 0xC0	NT	$SYMBOLIC_LINK
+// 0xC0	2K	$REPARSE_POINT
+// 0xD0	 	$EA_INFORMATION
+// 0xE0	 	$EA
+// 0xF0	NT	$PROPERTY_SET
+// 0x100	2K	$LOGGED_UTILITY_STREAM
 
+pub fn file_record(buf: &[u8]) -> Option<FileRecord> {
     let file = unsafe { from_utf8_unchecked(&buf[0..4]) };
-    assert_eq!(file, "FILE");
+    // assert_eq!(file, "FILE");
+    if file != "FILE" {
+        return None;
+    }
 
     let update_sequence_offset = u16::from_le_bytes([buf[4], buf[5]]);
 
@@ -133,11 +152,9 @@ pub fn file_record(reader: &mut BufReader<File>) -> FileRecord {
     // let first_attribute = buf[first_attribute_offset as usize];
     // dbg!(first_attribute);
 
-    standard_attribute_header(&buf[first_attribute_offset as usize..]);
+    attribute_header(&buf[first_attribute_offset as usize..]);
 
-    println!();
-
-    FileRecord {
+    Some(FileRecord {
         update_sequence_offset,
         update_sequence_size,
         log_file_sequence_number,
@@ -150,5 +167,5 @@ pub fn file_record(reader: &mut BufReader<File>) -> FileRecord {
         file_reference_to_base,
         next_attribute_id,
         update_sequence_number,
-    }
+    })
 }

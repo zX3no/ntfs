@@ -5,7 +5,7 @@
 use ntfs::*;
 use std::{
     fs::File,
-    io::{BufReader, Seek, SeekFrom},
+    io::{BufReader, Read, Seek, SeekFrom},
 };
 
 fn main() {
@@ -16,5 +16,10 @@ fn main() {
     let mft_start_sector = pbs.mft_cluster_number * 8 * pbs.bytes_per_sector as u64;
     reader.seek(SeekFrom::Start(mft_start_sector)).unwrap();
 
-    file_record(&mut reader);
+    let mut buf = [0; 1024];
+    loop {
+        reader.read_exact(&mut buf).unwrap();
+        let file = file_record(&buf);
+        // dbg!(file);
+    }
 }
